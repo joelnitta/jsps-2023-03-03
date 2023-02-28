@@ -54,7 +54,7 @@ library(viridis)
 ::: {.column width="50%"}
 - Angiosperm Phylogeny Group<br>(被子植物系統グループ)
 - 1998年〜
-- 今まで４回くらい大きな<br>改善があった
+- 今まで４回くらい大きな<br>改訂があった
 :::
 
 ::: {.column width="50%"}
@@ -179,14 +179,15 @@ ggplot(ppg_changes, aes(x = n, y = level_ja)) +
 - 種レベル
 - オンライン
 - 常に更新されていく
-- コミュニティー型<br>（誰でも参加できる）
+- コミュニティ型<br>（誰でも参加できる）
 :::
 :::
 
 ::: {.column width="50%"}
 ![](images/rouxtopteris.png){fig-alt="alt-text"}  
 [親族 *Rouxopteris*]{.medium}  
-[Liu H *et al.* (2020) Plant Syst Evol 306:30 [https://doi.org/10.1016/j.ympev.2018.04.038](https://doi.org/10.1016/j.ympev.2018.04.038)]{.small}
+[Liu H *et al.* (2020) Plant Syst Evol 306:30  
+[https://doi.org/10.1016/j.ympev.2018.04.038](https://doi.org/10.1016/j.ympev.2018.04.038)]{.small}
 :::
 
 ::::
@@ -197,12 +198,12 @@ ggplot(ppg_changes, aes(x = n, y = level_ja)) +
 - 2016年: PPG I
 - 2020年: そろそろPPG IIを作らなきゃ・・
 - 2022年11月
-  - 元のPPG IメーリングリストにPPG IIの発表を回す
+  - 元のPPG IメーリングリストにPPG II作成を発表する
   - 新しいメンバーの募集を始める
 - 2023年2月：GitHubでの討論のテストを行う
 :::
 
-## コミュニティー
+## コミュニティ
 
 ```{r}
 #| echo: false
@@ -292,7 +293,7 @@ ggplot() +
 ## 分類群の討論
 
 ::: {.incremental}
-- 一提案ずつ一イシューを作る
+- 一つの提案ずつ一つのIssue（イシュー）を作る
 - イシューで議論する
 - 定期的に投票を行う（メーリングリストのみ）
 - 現在は**テストを行なっている**：[https://github.com/pteridogroup/ppg-demo](https://github.com/pteridogroup/ppg-demo)
@@ -321,7 +322,7 @@ ggplot() +
 ::: {.incremental}
 - PPG I: 属レベル、約300件
 - PPG II: 種レベル、**6万件以上**
-- 種名データはすでにマイケル・ハッスラーによって集計されている
+- 種名データはすでにマイケル・ハスラーによって<br>集計されている
 :::
 
 ## World Ferns
@@ -329,7 +330,7 @@ ggplot() +
 :::: {.columns}
 
 ::: {.column width="50%"}
-- 独立している研究者、<br>マイケル・ハッスラー<br>により管理
+- 独立研究者、<br>マイケル・ハスラー<br>により管理
 - 約1万3千種
 - 約5万シノニム
 - PPG I以降の変更も<br>入っている
@@ -373,15 +374,15 @@ ggplot() +
 
 - PPG Iからの変更点を全部リストアップして、<br>討論して、投票する
 - World Fernsのデータとの合流
-- Fern Tree of Life (Nitt *et al.* 2022、JSPS第21回大会)<br>との合併
+- Fern Tree of Life (Nitta *et al.* 2022、JSPS第21回大会)<br>との合併
   - 自動的に単系統群かどうかを感知
 
-## 今悩んでいるところ
+## 検討課題
 
-- 討論は属以上はいいかもしれないけど、種はどうする？
-  - いちいち投票するのは不要（無理）？
-  - 属レベル（など）で委員会を決めて、管理を任せる
-- 誰がデータを実際にいじるのか
+- 種の検討、討論はどうするべきか？
+  - 各種毎に投票するのは不要（無理）か？
+  - 属レベル（など）で委員会を決めて、<br>管理を任せるべきか？
+- 実際に誰がデータを更新するのか？
 
 ## 参加者募集中
 
