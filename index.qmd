@@ -10,6 +10,14 @@ format:
 ---
 
 ```{r}
+#| eval: false
+
+# Generate QR code pointing to URL for slides
+code <- qrcode::qr_code("https://joelnitta.github.io/jsps-2023-03-03")
+qrcode::generate_svg(code, "images/qrcode.svg")
+```
+
+```{r}
 #| echo: false
 #| message: false
 
@@ -31,7 +39,23 @@ library(viridis)
 [日本植物分類学会第22大会 A01  
 2023.03.03]{.medium}
 
-[[https://www.joelnitta.com](https://www.joelnitta.com)]{.right .medium}
+:::: {.columns}
+
+::: {.column width="20%"}
+
+:::
+
+::: {.column width="60%" .medium}
+[https://joelnitta.github.io/jsps-2023-03-03](https://joelnitta.github.io/jsps-2023-03-03)  
+[https://www.joelnitta.com](https://www.joelnitta.com)
+:::
+
+::: {.column width="20%"}
+![](images/qrcode.svg){fig-alt="QR code pointing to https://github.io/jsps-2023-03-03" width="200" height="200"}
+:::
+
+::::
+
 
 ## 分類体系は進化生物学に欠かせない
 
@@ -403,3 +427,6 @@ ggplot() +
 - Harald Schneider
 - Carl Rothfels
 - シダ植物コミュニティの皆様
+
+![](images/qrcode.svg){fig-alt="QR code pointing to https://github.io/jsps-2023-03-03" width="200" height="200"}
+[https://joelnitta.github.io/jsps-2023-03-03](https://joelnitta.github.io/jsps-2023-03-03)
