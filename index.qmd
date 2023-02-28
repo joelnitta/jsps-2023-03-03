@@ -1,0 +1,404 @@
+---
+format:
+  revealjs:
+    slide-level: 2
+    css: styles.css
+    slide-number: true
+    self-contained: true
+    from: markdown+emoji
+    theme: serif
+---
+
+```{r}
+#| echo: false
+#| message: false
+
+library(readxl)
+library(tidyverse)
+library(janitor)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(viridis)
+```
+
+## シダ植物に関する新しい<br>コミュニティ主導型分類体系
+
+**ニッタ ジョエル**
+
+[東京大学・大学院新領域創成科学研究科・先端生命科学専攻]{.medsmall}
+
+[日本植物分類学会第22大会 A01  
+2023.03.03]{.medium}
+
+[[https://www.joelnitta.com](https://www.joelnitta.com)]{.right .medium}
+
+## 分類体系は進化生物学に欠かせない
+
+:::: {.columns}
+
+::: {.column width="50%"}
+リンネから始まって<br>今まで…
+:::
+
+::: {.column width="50%"}
+![](images/Linnaeus1758-title-page.jpg){fig-alt="Cover of Systema Naturae" width="350" height="450"}  
+[[https://en.wikipedia.org/wiki/Carl_Linnaeus](https://en.wikipedia.org/wiki/Carl_Linnaeus)]{.small}
+:::
+
+::::
+
+## APG
+
+:::: {.columns}
+::: {.column width="50%"}
+- Angiosperm Phylogeny Group<br>(被子植物系統グループ)
+- 1998年〜
+- 今まで４回くらい大きな<br>改善があった
+:::
+
+::: {.column width="50%"}
+![](images/treeapweb2s.gif){fig-alt="AGP tree" width="350" height="450"}  
+[[http://www.mobot.org/MOBOT/research/APweb/](http://www.mobot.org/MOBOT/research/APweb/)]{.small}
+:::
+
+::::
+
+## PPG
+
+:::: {.columns}
+::: {.column width="50%"}
+- **Pteridophyte** Phylogeny Group<br>(シダ植物系統グループ)
+- 2016年〜
+- 引用数1,102回^[2023年2月24日、google scholarによる]
+- まだ一度もアップデート<br>されていない
+- すでに様々な変更が必要
+:::
+
+::: {.column width="50%"}
+![](images/ppgi.png){fig-alt="PPGI publication cover page"}  
+[Pteridophyte Phylogeny Group I (2016) JSE 54:563–603.0 [https://doi.org/10.1111/jse.12229](https://doi.org/10.1111/jse.12229)]{.small}
+:::
+
+::::
+
+
+## PPG
+
+:::: {.columns}
+::: {.column width="50%"}
+- Pteridophyte Phylogeny Group<br>(シダ植物系統グループ)
+- 2016年から始まった
+- 引用数1,102回^[2023年2月24日、google scholarによる]
+- まだ一度もアップデート<br>されていない
+- すでに様々な変更が必要
+:::
+
+::: {.column width="50%"}
+![](images/ppgi_tree.png){fig-alt="PPGI family level phylogeny" width="400" height="500"}  
+[Pteridophyte Phylogeny Group I (2016) JSE 54:563–603.0 [https://doi.org/10.1111/jse.12229](https://doi.org/10.1111/jse.12229)]{.small}
+:::
+
+::::
+
+## PPG
+
+:::: {.columns}
+::: {.column width="50%"}
+- Pteridophyte Phylogeny Group<br>(シダ植物系統グループ)
+- 2016年から始まった
+- 引用数1,102回^[2023年2月24日、google scholarによる]
+- まだ一度もアップデート<br>されていない
+- **すでに様々な変更が必要**
+:::
+
+::: {.column width="50%"}
+![](images/ppgi_tree.png){fig-alt="PPGI family level phylogeny" width="400" height="500"}  
+[Pteridophyte Phylogeny Group I (2016) JSE 54:563–603.0 [https://doi.org/10.1111/jse.12229](https://doi.org/10.1111/jse.12229)]{.small}
+:::
+
+::::
+
+## PPG
+
+```{r}
+#| echo: false
+#| message: false
+
+# translation of taxonomic levels into ja
+bunrui <-
+  tribble(
+    ~level, ~level_ja,
+    "family", "科",
+    "subfamily", "亜科",
+    "tribus", "連",
+    "genus", "属"
+  )
+
+ppg_changes <- readxl::read_xlsx(
+  "data/PPGIIchangesspearsheetDec16th.xlsx", skip = 2) %>%
+  clean_names() %>%
+  select(class, subclass, order, suborder, family, subfamily, tribe, genus, contains("change")) %>%
+  filter(
+    !is.na(changes_genus_level) |
+    !is.na(change_family_level) |
+    !is.na(change_subfamily_level) |
+    !is.na(change_tribus_level)
+  ) %>%
+  mutate(
+    taxon = paste(
+      class, subclass, order, suborder, family, subfamily, tribe, genus)
+  ) %>%
+  select(taxon, matches("change.*level")) %>%
+  pivot_longer(names_to = "level", values_to = "change", -taxon) %>%
+  filter(!is.na(change)) %>%
+  count(level) %>%
+  mutate(
+    level = str_remove_all(level, "change_|_level") %>%
+      str_remove_all("changes_")
+  ) %>%
+  left_join(bunrui) %>%
+  mutate(level_ja = fct_reorder(level_ja, n))
+
+ggplot(ppg_changes, aes(x = n, y = level_ja)) +
+  geom_col() +
+  ylab("分類階級") +
+  xlab("数") +
+  ggtitle("PPGにおける更新が必要な分類群") +
+  theme_gray(
+    base_size = 18,
+    base_family = "HiraKakuPro-W3")
+```
+
+## 次世代PPGの特徴
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.incremental}
+- 種レベル
+- オンライン
+- 常に更新されていく
+- コミュニティー型<br>（誰でも参加できる）
+:::
+:::
+
+::: {.column width="50%"}
+![](images/rouxtopteris.png){fig-alt="alt-text"}  
+[親族 *Rouxopteris*]{.medium}  
+[Liu H *et al.* (2020) Plant Syst Evol 306:30 [https://doi.org/10.1016/j.ympev.2018.04.038](https://doi.org/10.1016/j.ympev.2018.04.038)]{.small}
+:::
+
+::::
+
+## タイムライン
+
+::: {.incremental}
+- 2016年: PPG I
+- 2020年: そろそろPPG IIを作らなきゃ・・
+- 2022年11月
+  - 元のPPG IメーリングリストにPPG IIの発表を回す
+  - 新しいメンバーの募集を始める
+- 2023年2月：GitHubでの討論のテストを行う
+:::
+
+## コミュニティー
+
+```{r}
+#| echo: false
+#| message: false
+
+# Load participant list
+ppg_com <- readxl::read_xlsx("data/working_v10.xlsx") %>%
+  clean_names() %>%
+  mutate(
+    country = str_replace_all(country, "USA", "United States of America") %>%
+      str_replace_all("UK", "United Kingdom") %>%
+      str_replace_all("Brunei Darussalam", "Brunei")
+    )
+
+# Count participants by country
+ppg_count <- ppg_com %>%
+  count(country)
+
+# Get number of participants in Japan
+n_japan <- ppg_com %>%
+  filter(country == "Japan") %>%
+  nrow()
+
+# Load world map
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# So centroid calculations work
+sf_use_s2(FALSE)
+
+# Calculate centroids
+centroids <-
+world %>%
+  filter(name_sort %in% ppg_com$country) %>%
+  st_centroid() %>%
+  left_join(ppg_count, by = c(name_sort = "country"))
+```
+
+```{r}
+#| echo: false
+#| message: false
+my_breaks <- c(5, 15, 30, 45)
+
+ggplot() +
+  geom_sf(data = world, fill = "transparent", color = "grey50") +
+  geom_point(
+    data = centroids,
+    aes(size = n, fill = n, geometry = geometry),
+    shape = 21,
+    stat = "sf_coordinates") +
+  scale_size_continuous(
+    name = "人数",
+    breaks = my_breaks,
+    labels = my_breaks
+  ) +
+  scale_fill_viridis(
+    option = "viridis",
+    name = "人数",
+    breaks = my_breaks,
+    labels = my_breaks
+  ) +
+  guides(fill = guide_legend(), size = guide_legend())  +
+  theme_gray(
+    base_size = 18,
+    base_family = "HiraKakuPro-W3") +
+  theme(
+    plot.background = element_rect(fill = "transparent"),
+    panel.background = element_rect(fill = "transparent"),
+    axis.title = element_blank(),
+    legend.key = element_rect(fill = "transparent")
+  )
+```
+
+合計`r nrow(ppg_com)`人、日本から`r n_japan`人（2023年2月23日）
+
+## 分類群の討論
+
+- PPG I：メール
+  - 不透明
+  - 記録が残らない
+
+. . .
+
+- PPG II: **GitHub**
+  - **オープン**（誰でも参加できる・見える）
+  - **永遠に残る**（GitHubが存在している限り）
+
+## 分類群の討論
+
+::: {.incremental}
+- 一提案ずつ一イシューを作る
+- イシューで議論する
+- 定期的に投票を行う（メーリングリストのみ）
+- 現在は**テストを行なっている**：[https://github.com/pteridogroup/ppg-demo](https://github.com/pteridogroup/ppg-demo)
+:::
+
+![](images/talk1_purple_woman.png){fig-alt="talking woman" height="175"}
+![](images/talk3_yellow_man.png){fig-alt="talking woman" height="175"}
+![](images/talk2_green_woman.png){fig-alt="talking woman" height="175"}
+![](images/talk9_brown_man.png){fig-alt="talking woman" height="175"}
+![](images/talk5_blue_woman.png){fig-alt="talking woman" height="175"}
+
+---
+
+[https://github.com/pteridogroup/ppg-demo/issues](https://github.com/pteridogroup/ppg-demo/issues)
+
+![](images/issues.png){fig-alt="Issues list"}
+
+---
+
+[https://github.com/pteridogroup/ppg-demo/issues/1](https://github.com/pteridogroup/ppg-demo/issues/1)
+
+![](images/comments.png){fig-alt="Comments on an issue"}
+
+## データ
+
+::: {.incremental}
+- PPG I: 属レベル、約300件
+- PPG II: 種レベル、**6万件以上**
+- 種名データはすでにマイケル・ハッスラーによって集計されている
+:::
+
+## World Ferns
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 独立している研究者、<br>マイケル・ハッスラー<br>により管理
+- 約1万3千種
+- 約5万シノニム
+- PPG I以降の変更も<br>入っている
+:::
+
+::: {.column width="50%"}
+![](https://www.worldplants.de/fileadmin/logos/world-ferns-logo.jpg){fig-alt="World Ferns logo"}  
+[[https://www.worldplants.de/world-ferns/ferns-and-lycophytes-list](https://www.worldplants.de/world-ferns/ferns-and-lycophytes-list)]{.small}
+:::
+
+::::
+
+## Darwin Core Taxon (DWC) 形式
+
+- GBIFなど大きなデータベースに使われている
+- CSVファイルに収まる
+- １行＝一分類群
+- 私が開発しているRパッケージ「dwctaxon」で管理（[https://github.com/joelnitta/dwctaxon](https://github.com/joelnitta/dwctaxon)）
+
+---
+
+[https://dwc.tdwg.org/terms/#taxon](https://dwc.tdwg.org/terms/#taxon)
+
+![](images/dwctaxon_terms.png){fig-alt="Screenshot of DWC terms"}
+
+---
+
+[https://github.com/fernphy/pteridocat](https://github.com/fernphy/pteridocat)
+
+![](images/dwc.png){fig-alt="Example of data in DWC format"}
+
+... 6万件まで
+
+---
+
+[https://github.com/joelnitta/dwctaxon](https://github.com/joelnitta/dwctaxon)
+
+![](images/dwctaxon.png){fig-alt="Screenshot of DWC taxon"}
+
+## 今後の課題
+
+- PPG Iからの変更点を全部リストアップして、<br>討論して、投票する
+- World Fernsのデータとの合流
+- Fern Tree of Life (Nitt *et al.* 2022、JSPS第21回大会)<br>との合併
+  - 自動的に単系統群かどうかを感知
+
+## 今悩んでいるところ
+
+- 討論は属以上はいいかもしれないけど、種はどうする？
+  - いちいち投票するのは不要（無理）？
+  - 属レベル（など）で委員会を決めて、管理を任せる
+- 誰がデータを実際にいじるのか
+
+## 参加者募集中
+
+<br>
+
+シダ植物の分類にご興味のある方は是非参加してみて<br>ください！
+
+<br>
+
+### [schuettpelze@si.edu（Eric Schuettpelz）]{.center}
+
+# ご清聴ありがとう<br>ございました
+
+## 謝辞
+
+- Michael Hassler
+- Eric Schuettpelz
+- Harald Schneider
+- Carl Rothfels
+- シダ植物コミュニティの皆様
