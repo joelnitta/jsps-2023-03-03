@@ -8,6 +8,7 @@ format:
     from: markdown+emoji
     theme: serif
     footer: "[https://joelnitta.github.io/jsps-2023-03-03](https://joelnitta.github.io/jsps-2023-03-03)"
+    pdf-separate-fragments: true
 ---
 
 ```{r}
