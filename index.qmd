@@ -98,9 +98,11 @@ library(viridis)
 ::: {.column width="50%"}
 - **Pteridophyte** Phylogeny Group<br>(シダ植物系統グループ)
 - 2016年〜
-- 引用数1,102回^[2023年2月24日、google scholarによる]
+- 引用数1,102回\*
 - まだ一度もアップデート<br>されていない
 - すでに様々な変更が必要
+
+[\*2023年2月24日、google scholarによる]{.medsmall}
 :::
 
 ::: {.column width="50%"}
@@ -442,7 +444,3 @@ ggplot() +
 - 東京大大学院新領域創成科学研究科学<br>岩崎研究室メンバー
 
 ![](images/qrcode.svg){fig-alt="QR code pointing to https://github.io/jsps-2023-03-03" width="200" height="200"}
-[https://joelnitta.github.io/jsps-2023-03-03](https://joelnitta.github.io/jsps-2023-03-03)
-
-::: footer
-:::
