@@ -7,6 +7,7 @@ format:
     self-contained: true
     from: markdown+emoji
     theme: serif
+    footer: "[https://joelnitta.github.io/jsps-2023-03-03](https://joelnitta.github.io/jsps-2023-03-03)"
 ---
 
 ```{r}
@@ -56,6 +57,8 @@ library(viridis)
 
 ::::
 
+::: footer
+:::
 
 ## 分類体系は進化生物学に欠かせない
 
@@ -79,11 +82,12 @@ library(viridis)
 - Angiosperm Phylogeny Group<br>(被子植物系統グループ)
 - 1998年〜
 - 今まで４回くらい大きな<br>改訂があった
+
+[[http://www.mobot.org/MOBOT/research/APweb/](http://www.mobot.org/MOBOT/research/APweb/)]{.small}
 :::
 
 ::: {.column width="50%"}
-![](images/treeapweb2s.gif){fig-alt="AGP tree" width="350" height="450"}  
-[[http://www.mobot.org/MOBOT/research/APweb/](http://www.mobot.org/MOBOT/research/APweb/)]{.small}
+![](images/treeapweb2s.gif){.absolute top=10 right=10 fig-alt="APG tree" height="700"}
 :::
 
 ::::
@@ -111,16 +115,15 @@ library(viridis)
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Pteridophyte Phylogeny Group<br>(シダ植物系統グループ)
-- 2016年から始まった
-- 引用数1,102回^[2023年2月24日、google scholarによる]
+- **Pteridophyte** Phylogeny Group<br>(シダ植物系統グループ)
+- 2016年〜
+- 引用数1,102回
 - まだ一度もアップデート<br>されていない
 - すでに様々な変更が必要
 :::
 
 ::: {.column width="50%"}
-![](images/ppgi_tree.png){fig-alt="PPGI family level phylogeny" width="400" height="500"}  
-[Pteridophyte Phylogeny Group I (2016) JSE 54:563–603.0 [https://doi.org/10.1111/jse.12229](https://doi.org/10.1111/jse.12229)]{.small}
+![](images/ppgi_tree.png){.absolute top=0 right=0 fig-alt="PPGI family level phylogeny" height="800"}
 :::
 
 ::::
@@ -129,16 +132,15 @@ library(viridis)
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Pteridophyte Phylogeny Group<br>(シダ植物系統グループ)
-- 2016年から始まった
-- 引用数1,102回^[2023年2月24日、google scholarによる]
+- **Pteridophyte** Phylogeny Group<br>(シダ植物系統グループ)
+- 2016年〜
+- 引用数1,102回
 - まだ一度もアップデート<br>されていない
 - **すでに様々な変更が必要**
 :::
 
 ::: {.column width="50%"}
-![](images/ppgi_tree.png){fig-alt="PPGI family level phylogeny" width="400" height="500"}  
-[Pteridophyte Phylogeny Group I (2016) JSE 54:563–603.0 [https://doi.org/10.1111/jse.12229](https://doi.org/10.1111/jse.12229)]{.small}
+![](images/ppgi_tree.png){.absolute top=0 right=0 fig-alt="PPGI family level phylogeny" height="800"}
 :::
 
 ::::
@@ -187,14 +189,16 @@ ppg_changes <- readxl::read_xlsx(
 ggplot(ppg_changes, aes(x = n, y = level_ja)) +
   geom_col() +
   ylab("分類階級") +
-  xlab("数") +
-  ggtitle("PPGにおける更新が必要な分類群") +
+  xlab("分類の数") +
+  ggtitle("2016年より新しく提案された分類群") +
   theme_gray(
     base_size = 18,
     base_family = "HiraKakuPro-W3")
 ```
 
-## 次世代PPGの特徴
+これらの分類群を認めるかどうか、議論する必要あり
+
+## PPG IIの特徴
 
 :::: {.columns}
 
@@ -203,13 +207,13 @@ ggplot(ppg_changes, aes(x = n, y = level_ja)) +
 - 種レベル
 - オンライン
 - 常に更新されていく
-- コミュニティ型<br>（誰でも参加できる）
+- **コミュニティ型<br>（誰でも参加できる）**
 :::
 :::
 
 ::: {.column width="50%"}
 ![](images/rouxtopteris.png){fig-alt="alt-text"}  
-[親族 *Rouxopteris*]{.medium}  
+[親属 *Rouxopteris*]{.medium}  
 [Liu H *et al.* (2020) Plant Syst Evol 306:30  
 [https://doi.org/10.1016/j.ympev.2018.04.038](https://doi.org/10.1016/j.ympev.2018.04.038)]{.small}
 :::
@@ -313,6 +317,7 @@ ggplot() +
 - PPG II: **GitHub**
   - **オープン**（誰でも参加できる・見える）
   - **永遠に残る**（GitHubが存在している限り）
+    - 反対意見の可視化
 
 ## 分類群の討論
 
@@ -341,7 +346,7 @@ ggplot() +
 
 ![](images/comments.png){fig-alt="Comments on an issue"}
 
-## データ
+## データはどこから来るのか？
 
 ::: {.incremental}
 - PPG I: 属レベル、約300件
@@ -380,13 +385,11 @@ ggplot() +
 
 ![](images/dwctaxon_terms.png){fig-alt="Screenshot of DWC terms"}
 
----
-
-[https://github.com/fernphy/pteridocat](https://github.com/fernphy/pteridocat)
+## データの例
 
 ![](images/dwc.png){fig-alt="Example of data in DWC format"}
 
-... 6万件まで
+合計66,573件
 
 ---
 
@@ -404,30 +407,42 @@ ggplot() +
 ## 検討課題
 
 - 種の検討、討論はどうするべきか？
-  - 各種毎に投票するのは不要（無理）か？
+  - 各種毎の投票は不要（無理）か？
   - 属レベル（など）で委員会を決めて、<br>管理を任せるべきか？
-- 実際に誰がデータを更新するのか？
 
 ## 参加者募集中
 
 <br>
 
-シダ植物の分類にご興味のある方は是非参加してみて<br>ください！
+シダ植物の分類に興味のある方は是非ご参加ください！
 
 <br>
 
-### [schuettpelze@si.edu（Eric Schuettpelz）]{.center}
+### [nitta@edu.k.u-tokyo.ac.jp]{.center}
 
 # ご清聴ありがとう<br>ございました
 
 ## 謝辞
 
+:::: {.columns}
+
+::: {.column width="50%"}
 - Michael Hassler
 - Eric Schuettpelz
 - Harald Schneider
+:::
+
+::: {.column width="50%"}
 - Carl Rothfels
-- シダ植物コミュニティの皆様
-- 東京大大学院新領域創成科学研究科学岩崎研究室メンバー
+- シダ植物コミュニティの<br>皆様
+:::
+
+::::
+
+- 東京大大学院新領域創成科学研究科学<br>岩崎研究室メンバー
 
 ![](images/qrcode.svg){fig-alt="QR code pointing to https://github.io/jsps-2023-03-03" width="200" height="200"}
 [https://joelnitta.github.io/jsps-2023-03-03](https://joelnitta.github.io/jsps-2023-03-03)
+
+::: footer
+:::
