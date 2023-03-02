@@ -427,6 +427,7 @@ ggplot() +
 - Harald Schneider
 - Carl Rothfels
 - シダ植物コミュニティの皆様
+- 東京大大学院新領域創成科学研究科学岩崎研究室メンバー
 
 ![](images/qrcode.svg){fig-alt="QR code pointing to https://github.io/jsps-2023-03-03" width="200" height="200"}
 [https://joelnitta.github.io/jsps-2023-03-03](https://joelnitta.github.io/jsps-2023-03-03)
